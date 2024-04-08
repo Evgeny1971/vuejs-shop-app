@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     fetchProducts() {
-      axios.get('/api/products')
+      axios.get('http://localhost:5000/get-all-products')
         .then(response => {
           this.products = response.data;
         })
@@ -89,7 +89,7 @@ export default {
     addProduct() {
       // Upload image first, then add product
       this.uploadImage().then(() => {
-        axios.post('/api/products', this.product)
+        axios.post('http://localhost:5000/create-product', this.product)
           .then(response => {
             this.products.push(response.data);
             this.resetForm();
@@ -102,7 +102,7 @@ export default {
     uploadImage() {
       const formData = new FormData();
       formData.append('image', this.product.image);
-      return axios.post('/api/upload', formData, {
+      return axios.post('http://localhost:5000/update-product', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -124,7 +124,7 @@ export default {
     updateProduct() {
       // Upload image first, then update product
       this.uploadImage().then(() => {
-        axios.put(`/api/products/${this.product.id}`, this.product)
+        axios.put(`http://localhost:5000/update-product/${this.product.id}`, this.product)
           .then(() => {
             const index = this.products.findIndex(p => p.id === this.product.id);
             if (index !== -1) {
@@ -138,7 +138,7 @@ export default {
       });
     },
     deleteProduct(productId) {
-      axios.delete(`/api/products/${productId}`)
+      axios.delete(`http://localhost:5000/delete-product${productId}`)
         .then(() => {
           this.products = this.products.filter(product => product.id !== productId);
         })
@@ -160,7 +160,7 @@ export default {
       this.editingMode = false;
     },
     getImageUrl(filename) {
-      return `/api/images/${filename}`;
+      return `http://localhost:5000/get-image${filename}`;
     },
     sortBy(field) {
       if (this.sortByField === field) {
